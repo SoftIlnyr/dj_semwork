@@ -28,3 +28,6 @@ class ArtUserRegistrationForm(UserCreationForm):
             artuser.avatar = self.cleaned_data["avatar"]
             artuser.save()
         return user
+
+class ArtWorkForm(forms.ModelForm):
+    title = forms.CharField()
