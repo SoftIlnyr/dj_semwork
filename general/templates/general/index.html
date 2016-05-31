@@ -12,14 +12,17 @@
 
                 <section class="content col-md-3">
             {% elif artwork.type == "picture" %}
-                <section class="content col-md-4">
+                <section class="content col-md-3">
+            {% elif artwork.type == "litra" %}
+                <section class="content col-md-3">
             {% endif %}
 
 
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">{{ artwork.title }} </h3> <small>by {{ artwork.author.user.username }}</small>
+                <h3 class="box-title">{{ artwork.title }} </h3>
+                <small>by {{ artwork.author.user.username }}</small>
                 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
@@ -35,10 +38,13 @@
 
                         <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
                     {% endif %}
-                    <audio id="player{{ artwork.id }}" src="{{ artwork.mtrack.content.url }}" controls
-                           preload="none" class="audio-control" ></audio>
+                    <audio src="{{ artwork.mtrack.content.url }}" controls
+                           preload="none" class="audio-control"></audio>
                 {% elif artwork.type == "picture" %}
                     <img class="img-responsive" src="{{ artwork.picture.content.url }}">
+                {% elif artwork.type == "litra" %}
+                    <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
+
                 {% endif %}
             </div><!-- /.box-body -->
         </div><!-- /.box -->

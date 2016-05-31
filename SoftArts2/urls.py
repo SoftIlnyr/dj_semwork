@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^register/', 'general.views.register', name='register'),
     url(r'^music/', include('music.urls', namespace='music')),
     url(r'^pictures/', include('pictures.urls', namespace='pictures')),
+    url(r'^literature/', include('literature.urls', namespace='literature')),
 
 
 

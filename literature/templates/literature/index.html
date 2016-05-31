@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper bg-picture" style="background-image: {% static 'music.jpg' %}">
+        <!-- Content Header (Page header) -->
+        {% for artwork in artworks %}
+
+            <!-- Main content -->
+            <section class="content col-md-6">
+
+                <!-- Default box -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{ artwork.title }}</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse">
+                                <i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                                <i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                            <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+
+            </section><!-- /.content -->
+        {% endfor %}
+
+    </div><!-- /.content-wrapper -->
+
+{% endblock %}
