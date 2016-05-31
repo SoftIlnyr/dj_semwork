@@ -9,7 +9,7 @@ class ArtUserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=False)
     last_name = forms.CharField(required=False)
-    # avatar = forms.ImageField()
+    avatar = forms.ImageField(required=False)
 
     class Meta:
         model = User
@@ -25,5 +25,6 @@ class ArtUserRegistrationForm(UserCreationForm):
             user.save()
             artuser = ArtUser()
             artuser.user = user
+            artuser.avatar = self.cleaned_data["avatar"]
             artuser.save()
         return user

@@ -9,7 +9,7 @@ class ArtUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='artuser')
     followers = models.ManyToManyField('ArtUser', blank=True, related_name='following')
     favorites = models.ManyToManyField('ArtWork', blank=True, related_name='favorite')
-    avatar = models.ImageField(u'avatar', upload_to='accounts/avatar/', blank=True)
+    avatar = models.ImageField(u'avatar', upload_to='accounts/avatar/', blank=True, default='accouns/avatar/default.jpg')
 
     def __unicode__(self):
         return "%s" % (self.user.username)

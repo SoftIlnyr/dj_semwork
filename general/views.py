@@ -54,7 +54,7 @@ def register(request):
         f = ArtUserRegistrationForm()
         return render(request, "general/register.html", {"f": f, })
     elif request.method == "POST":
-        f = ArtUserRegistrationForm(request.POST)
+        f = ArtUserRegistrationForm(request.POST, request.FILES)
         if f.is_valid():
             f.save()
             return redirect('login')

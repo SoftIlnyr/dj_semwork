@@ -34,7 +34,7 @@
 
     <div class="register-box-body">
         <p class="login-box-msg">Register a new membership</p>
-        <form action="{% url 'register' %}" method="post">{% csrf_token %}
+        <form action="{% url 'register' %}" enctype="multipart/form-data" method="post">{% csrf_token %}
             {% bootstrap_form_errors f%}
             {{ f.non_field_errors }}
             {% bootstrap_field f.username layout='inline' %}
@@ -43,7 +43,8 @@
             {% bootstrap_field f.last_name layout='inline' %}
             {% bootstrap_field f.password1 layout='inline' %}
             {% bootstrap_field f.password2 layout='inline' %}
-{#            {% bootstrap_field f.avatar %}#}
+            {% bootstrap_field f.avatar %}
+
             <div class="row">
                 <div class="col-xs-8">
 
