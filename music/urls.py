@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from music.views import index
+from music.views import *
 
 urlpatterns = [
-    url(r'^$', index, name='index')
+    url(r'^$', index, name='index'),
+    url(r'^add/', add_mtrack, name='add')
+
 
 
 ]
