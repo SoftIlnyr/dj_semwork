@@ -17,8 +17,14 @@ class ArtUser(models.Model):
 class ArtWork(models.Model):
     title = models.CharField(max_length=30)
     author = models.ForeignKey(ArtUser)
-    pub_date = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField()
     rating = models.IntegerField(default=0)
+    type = models.CharField(max_length=10, blank=True)
+
+    def __unicode__(self):
+        return "%s - %s" % (self.title, self.type)
+
+
 
 class Comment(models.Model):
     art_work = models.ForeignKey(ArtWork)

@@ -3,12 +3,12 @@
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper bg-music" style="background-image: {% static 'music.jpg' %}">
+    <div class="content-wrapper bg-picture" style="background-image: {% static 'music.jpg' %}">
         <!-- Content Header (Page header) -->
         {% for artwork in artworks %}
 
             <!-- Main content -->
-            <section class="content col-md-3">
+            <section class="content col-md-4">
 
                 <!-- Default box -->
                 <div class="box">
@@ -24,11 +24,7 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        {% if artwork.mtrack.image %}
-
-                            <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
-                        {% endif %}
-                        <audio  id="player{{ artwork.id }}" src="{{ artwork.mtrack.content.url }}" controls preload="none" class="audio-control"></audio>
+                            <img class="img-responsive" src="{{ artwork.picture.content.url }}">
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
 

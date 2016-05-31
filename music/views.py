@@ -1,3 +1,6 @@
+from datetime import datetime
+from time import timezone
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -12,7 +15,7 @@ def index(request):
     artworks = ArtWork.objects.all()
     mtracks = []
     for artwork in artworks:
-        if not artwork.mtrack is None:
+        if artwork.type == 'music':
             mtracks.append(artwork)
     return render(request, 'music/index.html', {"artworks": mtracks,})
 
@@ -26,6 +29,8 @@ def add_mtrack(request):
             artwork = ArtWork()
             artwork.title = f.cleaned_data["title"]
             artwork.author = request.user.artuser
+            artwork.pub_date = datetime.now()
+            artwork.type = 'music'
             artwork.save()
             mtrack = MTrack()
             mtrack.artwork = artwork

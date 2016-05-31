@@ -4644,6 +4644,12 @@ table.text-center, table.text-center td, table.text-center th {
     background-size: cover;
 }
 
+.bg-picture {
+    background-image: url("../../picture.jpg");
+    background-repeat: no-repeat;;
+    background-size: cover;
+}
+
 .bg-purple-gradient {
     background: #605ca8 !important;
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #605ca8), color-stop(1, #9491c4)) !important;

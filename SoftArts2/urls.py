@@ -19,11 +19,17 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from SoftArts2 import settings
+from general.views import index as main_page
 
 urlpatterns = [
+    url(r'^$', main_page, name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', 'general.views.login', name='login'),
     url(r'^logout/', 'general.views.logout', name='logout'),
     url(r'^register/', 'general.views.register', name='register'),
     url(r'^music/', include('music.urls', namespace='music')),
+    url(r'^pictures/', include('pictures.urls', namespace='pictures')),
+
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

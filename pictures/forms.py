@@ -10,12 +10,12 @@ from general.models import ArtUser, ArtWork
 from music.models import MTrack
 from audiofield.forms import AudioFormField
 
-class MTrackForm(ArtWorkForm):
+class PictureForm(ArtWorkForm):
     title = forms.CharField()
-    content = AudioFormField()
-    image = forms.ImageField(required=False)
+    content = forms.ImageField(required=True)
     description = forms.CharField(widget=forms.Textarea, required=False)
 
     class Meta:
         model = ArtWork
         fields = ('title', )
+

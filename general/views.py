@@ -11,11 +11,16 @@ from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
 
 from general.forms import ArtUserRegistrationForm
+from general.models import ArtWork
 
+
+def index(request):
+    artworks = ArtWork.objects.all().order_by("-pub_date")
+    return render(request, 'general/index.html', {"artworks": artworks,})
 
 def login(request):
     if request.user.is_authenticated():
-        return redirect(reverse("music:index"))
+        return redirect(reverse("pictures:index"))
     if request.method == "GET":
         context = {}
         if "next" in request.GET:
@@ -32,7 +37,7 @@ def login(request):
                     h.set_cookie(key="remember", value=user.username, max_age=24*60*60)
                 return h
             else:
-                h = redirect(reverse("music:index"))
+                h = redirect(reverse("pictures:index"))
                 if re != None:
                     h.set_cookie(key="remember", value=user.username, max_age=24*60*60)
                 return h
@@ -49,7 +54,7 @@ def logout(request):
 
 def register(request):
     if request.user.is_authenticated():
-        return redirect(reverse("music:index"))
+        return redirect(reverse("pictures:index"))
     if request.method == "GET":
         f = ArtUserRegistrationForm()
         return render(request, "general/register.html", {"f": f, })
