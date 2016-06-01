@@ -25,10 +25,9 @@ class ArtWork(models.Model):
         return "%s - %s" % (self.title, self.type)
 
 
-
 class Comment(models.Model):
     art_work = models.ForeignKey(ArtWork)
     publisher = models.ForeignKey(ArtUser)
     text = models.TextField(blank=False, max_length=255)
-    pub_date = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField()
     rating = models.IntegerField(default=0)

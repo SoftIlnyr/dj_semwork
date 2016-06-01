@@ -15,11 +15,14 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
-                    <li class=""><a href="#settings" data-toggle="tab" aria-expanded="false">Settings</a></li>
+                    {% if user == artwork.author.user %}
+                        <li class=""><a href="#settings" data-toggle="tab" aria-expanded="false">Settings</a></li>
+                    {% endif %}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="info">
                         <h3 class="box-title">{{ artwork.title }}</h3>
+
                         <div class="box-body">
                             {% if artwork.type == "music" %}
                                 <div class="col-md-3">
@@ -29,7 +32,7 @@
 
                                     {% endif %}
                                     <audio src="{{ artwork.mtrack.content.url }}" controls="controls"
-                                           preload="auto" class="audio-control"></audio>
+                                           preload="auto" style="width: 100%"></audio>
                                 </div>
                                 <div class="col-md-9">
                                     <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
@@ -47,38 +50,47 @@
                                 <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
                             {% endif %}
                         </div>
+                    <h3> <a href="#" class="link-black"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
+
                         <hr/>
                         <h3 class="box-title">Comments</h3>
+                        <form class="form-horizontal" method="post">{% csrf_token %}
+                            <div class="form-group margin-bottom-none">
+                                <div class="col-sm-9">
+                                    <input name="text_comment" class="form-control input-sm"
+                                           placeholder="Type your comment">
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-danger pull-right btn-block btn-sm">Send</button>
+                                </div>
+                            </div>
+                        </form>
 
-                        <!-- Post -->
-                        <div class="post">
-                            <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg"
-                                     alt="user image">
+                        <hr/>
+
+                        {% for comment in comments %}
+                            <!-- Comment -->
+                            <div class="post">
+                                <div class="user-block">
+                                    <img class="img-circle img-bordered-sm img-cropped"
+                                         src="{{ comment.publisher.avatar.url }}"
+                                         alt="user image">
                         <span class="username">
-                          <a href="#">Jonathan Burke Jr.</a>
+                          <a href="#">{{ comment.publisher.user.username }}.</a>
                           <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                         </span>
-                                <span class="description">Shared publicly - 7:30 PM today</span>
-                            </div><!-- /.user-block -->
-                            <p>
-                                Lorem ipsum represents a long-held tradition for designers,
-                                typographers and the like. Some people hate it and argue for
-                                its demise, but others ignore the hate as they create awesome
-                                tools to help create filler text for everyone from bacon lovers
-                                to Charlie Sheen fans.
-                            </p>
-                            <ul class="list-inline">
-                                <li><a href="#" class="link-black text-sm"><i
-                                        class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></li>
-                                <li class="pull-right"><a href="#" class="link-black text-sm"><i
-                                        class="fa fa-comments-o margin-r-5"></i> Comments (5)</a></li>
-                            </ul>
+                                    <span class="description">{{ comment.pub_date }}</span>
+                                </div><!-- /.user-block -->
+                                <p style="white-space: pre-wrap">{{ comment.text }}</p>
+                                <ul class="list-inline">
+                                    <li><a href="#" class="link-black text-sm"><i
+                                            class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></li>
+                                    <li class="pull-right"><a href="#" class="link-black text-sm"><i
+                                            class="fa fa-comments-o margin-r-5"></i> Comments (5)</a></li>
+                                </ul>
+                            </div><!-- /.comment -->
 
-                            <input class="form-control input-sm" type="text" placeholder="Type a comment">
-                        </div><!-- /.post -->
-
-
+                        {% endfor %}
                     </div><!-- /.tab-pane -->
 
 
@@ -106,8 +118,11 @@
                             <div class="form-group"><label class="col-md-2 control-label" for="id_description">Description</label>
                                 <div class="col-md-10"><textarea class="form-control" cols="40" id="id_description"
                                                                  name="description" placeholder="Description" rows="10"
-                                                                 title="">{% if artwork.type == "music" %}{{ artwork.mtrack.description }}
-                                {% elif artwork.type == "picture" %}{{ artwork.picture.description }}{% elif artwork.type == "litra" %}{{ artwork.litra.description }}{% endif %}
+                                                                 title="">{% if artwork.type == "music" %}
+                                    {{ artwork.mtrack.description }}
+                                {% elif artwork.type == "picture" %}
+                                    {{ artwork.picture.description }}{% elif artwork.type == "litra" %}
+                                    {{ artwork.litra.description }}{% endif %}
                                 </textarea></div>
                             </div>
 

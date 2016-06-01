@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from general.models import ArtWork, ArtUser
+from general.models import ArtWork, ArtUser, Comment
 
 
 class ArtUserInLine(admin.StackedInline):
@@ -20,5 +20,6 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(ArtWork)
+admin.site.register(Comment)
 # admin.site.register(ArtUser)
 

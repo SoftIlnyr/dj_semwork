@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -11,7 +13,7 @@ from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
 
 from general.forms import ArtUserRegistrationForm
-from general.models import ArtWork
+from general.models import ArtWork, Comment
 from literature.forms import WritingForm, WritingUpdateForm
 from music.forms import MTrackForm, MTrackUpdateForm
 from pictures.forms import PictureForm, PictureUpdateForm
@@ -22,8 +24,8 @@ def index(request):
     return render(request, 'general/index.html', {"artworks": artworks,})
 
 def artwork_page(request, artwork_id):
+    artwork = ArtWork.objects.get(id = artwork_id)
     if request.method == "GET":
-        artwork = ArtWork.objects.get(id = artwork_id)
         f = None
         if (artwork.type == "music"):
             f = MTrackUpdateForm()
@@ -31,9 +33,23 @@ def artwork_page(request, artwork_id):
             f = PictureUpdateForm()
         elif (artwork.type == "litra"):
             f = WritingUpdateForm()
-        return render(request, 'general/artwork_page.html', {'artwork': artwork, 'f': f})
+        comments = Comment.objects.filter(art_work = artwork)
+        return render(request, 'general/artwork_page.html', {'artwork': artwork, 'f': f, 'comments': comments})
     elif request.method == "POST":
-        pass
+        if request.user.is_authenticated():
+            ctext = request.POST.get("text_comment")
+            if len(ctext) == 0:
+                return redirect(reverse('artwork', args=artwork_id))
+            comment = Comment()
+            comment.art_work = artwork
+            comment.text = ctext
+            comment.publisher = request.user.artuser
+            comment.pub_date = datetime.now()
+            comment.save()
+            return redirect(reverse('artwork', args=(artwork_id,)))
+        else:
+            return redirect(reverse('artwork', args=artwork_id))
+
     else:
         return HttpResponse("405")
 
@@ -104,7 +120,7 @@ def login(request):
                     h.set_cookie(key="remember", value=user.username, max_age=24*60*60)
                 return h
         else:
-            return redirect(reverse("login"))
+            return redirect(reverse("index"))
     else:
         return HttpResponse("405")
 

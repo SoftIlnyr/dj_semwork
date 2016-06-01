@@ -10,11 +10,11 @@
             <!-- Main content -->
             {% if artwork.type == "music" %}
 
-                <section class="content col-md-3">
+                <section class="mycontent col-md-3">
             {% elif artwork.type == "picture" %}
-                <section class="content col-md-3">
+                <section class="mycontent col-md-3">
             {% elif artwork.type == "litra" %}
-                <section class="content col-md-5">
+                <section class="mycontent col-md-5">
             {% endif %}
 
 
@@ -37,11 +37,11 @@
                     {% if artwork.mtrack.image %}
 
                         <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
-                    {% elif not artwork.mtrack.description == ""%}
+                    {% elif not artwork.mtrack.description == "" %}
                         <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
                     {% endif %}
                     <audio src="{{ artwork.mtrack.content.url }}" controls
-                           preload="none" class="audio-control"></audio>
+                           preload="none" style="width: 100%;;"></audio>
                 {% elif artwork.type == "picture" %}
                     <img class="img-responsive img-bordered" src="{{ artwork.picture.content.url }}">
                 {% elif artwork.type == "litra" %}
@@ -50,10 +50,19 @@
                 <ul class="list-inline">
                     <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
                     </li>
-                    <li class="pull-right"><a href="#" class="link-black text-sm"><i
+                    <li class="pull-right"><a href="{% url 'artwork' artwork.id %}" class="link-black text-sm"><i
                             class="fa fa-comments-o margin-r-5"></i> Comments ()</a></li>
                 </ul>
-                <input class="form-control input-sm" type="text" placeholder="Type a comment">
+                <form class="form-horizontal">
+                    <div class="form-group margin-bottom-none">
+                        <div class="col-sm-9">
+                            <input class="form-control input-sm" placeholder="Type your comment">
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-danger pull-right btn-block btn-sm">Send</button>
+                        </div>
+                    </div>
+                </form>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
 
