@@ -85,13 +85,31 @@
                     <div class="tab-pane" id="settings">
                         <form class="form-horizontal" method="post" action="{% url 'artwork_update' artwork.id %}"
                               enctype="multipart/form-data">{% csrf_token %}
-                            {#                            {% bootstrap_form f layout='horizontal' %}#}
-                            {% bootstrap_field f.title layout='horizontal' %}
-                            {% if artwork.type == "music" %}
-                                {% bootstrap_field f.image layout='horizontal' %}
-                            {% endif %}
-                            {% bootstrap_field f.description layout='horizontal' %}
 
+                            <div class="form-group"><label class="col-md-2 control-label" for="id_title">Title</label>
+                                <div class="col-md-10"><input class="form-control" id="id_title" name="title"
+                                                              placeholder="Title" title="" type="text"
+                                                              value="{{ artwork.title }}"></div>
+                            </div>
+                            {% if artwork.type == "music" %}
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_image">Image</label>
+                                    <div class="col-md-10">
+                                        <div class="row bootstrap3-multi-input">
+                                            <div class="col-xs-12"><input class="" id="id_image" name="image" title=""
+                                                                          type="file"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="form-group"><label class="col-md-2 control-label" for="id_description">Description</label>
+                                <div class="col-md-10"><textarea class="form-control" cols="40" id="id_description"
+                                                                 name="description" placeholder="Description" rows="10"
+                                                                 title="">{% if artwork.type == "music" %}{{ artwork.mtrack.description }}
+                                {% elif artwork.type == "picture" %}{{ artwork.picture.description }}{% elif artwork.type == "litra" %}{{ artwork.litra.description }}{% endif %}
+                                </textarea></div>
+                            </div>
 
                             <div class="form-group ">
                                 <div class="col-md-11"></div>
