@@ -146,10 +146,10 @@ def user_follow_check(request, user_id):
         if not current_user == artuser:
             followers = artuser.followers.all()
             if current_user in followers:
-                return JsonResponse({"status": "yes"})
+                return JsonResponse({"flag": "yes"})
             else:
-                return JsonResponse({"status": "no"})
-        return JsonResponse({"status": "no"})
+                return JsonResponse({"flag": "no"})
+        return JsonResponse({"flag": "no"})
     else:
         return HttpResponse("405")
 
@@ -161,7 +161,7 @@ def artwork_like(request, artwork_id):
         current_user = request.user.artuser
         current_user.favorites.add(artwork)
         current_user.save()
-        return JsonResponse({"status": "ok"})
+        return JsonResponse({"flag": "ok"})
     else:
         return HttpResponse("405")
 
@@ -172,7 +172,7 @@ def artwork_unlike(request, artwork_id):
         current_user = request.user.artuser
         current_user.favorites.remove(artwork)
         current_user.save()
-        return JsonResponse({"status": "ok"})
+        return JsonResponse({"flag": "ok"})
     else:
         return HttpResponse("405")
 
@@ -183,9 +183,9 @@ def artwork_like_check(request, artwork_id):
         current_user = request.user.artuser
         favorites = current_user.favorites.all()
         if artwork in favorites:
-            return JsonResponse({"status": "yes"})
+            return JsonResponse({"flag": "yes"})
         else:
-            return JsonResponse({"status": "no"})
+            return JsonResponse({"flag": "no"})
     else:
         return HttpResponse("405")
 

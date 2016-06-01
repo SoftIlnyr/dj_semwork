@@ -43,7 +43,7 @@
 
                             {% if not user == auser %}
                                 <button id="{{ auser.id }}-follow-yes" onclick="follow_button(this)"
-                                        class="btn btn-block btn-soundcloud">Follow
+                                        class="btn btn-block btn-soundcloud" name="follow">Follow
                                 </button>
                             {% endif %}
                         </div><!-- /.box-body -->
@@ -64,7 +64,7 @@
                                 {% for artwork in artworks %}
                                     <h3 class="box-title"><a class="link-black"
                                                              href="{% url 'artwork' artwork.id %}">{{ artwork.title }}</a>
-                                        <a href="#" class="link-black pull-right"><i
+                                        <a href="#" class="link-black pull-right" name="like" id="{{ artwork.id }}-like-yes" onclick="like(this)"><i
                                                 class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
 
                                     <div class="box-body">

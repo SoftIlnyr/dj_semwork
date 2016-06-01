@@ -4,37 +4,37 @@
     <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
     <script src="{% static 'js/MyScripts.js' %}"></script>
 
-{#    <script>#}
-{#        $(document).ready(function () {#}
-{#            var array = window.location.href.split("/");#}
-{#            var id = array[array.length - 1];#}
-{#            var url = id + "/checkfollow";#}
-{#            var csrftoken = getCookie("csrftoken");#}
-{##}
-{#            console.log(url);#}
-{#            $.ajax({#}
-{#                url: url,#}
-{#                method: 'POST',#}
-{#                beforeSend: function (xhr, settings) {#}
-{#                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {#}
-{#                        xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
-{#                    }#}
-{#                },#}
-{#                data: {csrftoken: csrftoken},#}
-{#                dataType: "json",#}
-{#                success: function f(resp) {#}
-{#                    console.log('success');#}
-{#                    console.log(resp.status);#}
-{#                    if (resp.status == "yes") {#}
-{#                        obj = $("#" + id + "-follow-yes");#}
-{#                        console.log(obj.id);#}
-{#                        obj.id = id + "-follow-" + "no";#}
-{#                        $(obj).removeClass('btn-soundcloud').addClass('btn-primary');#}
-{#                        $(obj).text("Following")#}
-{#                    }#}
-{#                }#}
-{#            });#}
-{#        });</script>#}
+    {#    <script>#}
+    {#        $(document).ready(function () {#}
+    {#            var array = window.location.href.split("/");#}
+    {#            var id = array[array.length - 1];#}
+    {#            var url = id + "/checkfollow";#}
+    {#            var csrftoken = getCookie("csrftoken");#}
+    {##}
+    {#            console.log(url);#}
+    {#            $.ajax({#}
+    {#                url: url,#}
+    {#                method: 'POST',#}
+    {#                beforeSend: function (xhr, settings) {#}
+    {#                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {#}
+    {#                        xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
+    {#                    }#}
+    {#                },#}
+    {#                data: {csrftoken: csrftoken},#}
+    {#                dataType: "json",#}
+    {#                success: function f(resp) {#}
+    {#                    console.log('success');#}
+    {#                    console.log(resp.status);#}
+    {#                    if (resp.status == "yes") {#}
+    {#                        obj = $("#" + id + "-follow-yes");#}
+    {#                        console.log(obj.id);#}
+    {#                        obj.id = id + "-follow-" + "no";#}
+    {#                        $(obj).removeClass('btn-soundcloud').addClass('btn-primary');#}
+    {#                        $(obj).text("Following")#}
+    {#                    }#}
+    {#                }#}
+    {#            });#}
+    {#        });</script>#}
 
 
 
@@ -88,7 +88,7 @@
                     <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
                 {% endif %}
                 <ul class="list-inline">
-                    <li><a id="{{ artwork.id }}-like-yes" href="#" class="link-black text-sm" onclick="like(this)"><i
+                    <li><a name="like" id="{{ artwork.id }}-like-yes" href="#" class="link-black text-sm" onclick="like(this)"><i
                             class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
                     </li>
                     <li class="pull-right"><a href="{% url 'artwork' artwork.id %}" class="link-black text-sm"><i

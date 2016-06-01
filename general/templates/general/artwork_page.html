@@ -6,39 +6,6 @@
 {% block scripts %}
     <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
     <script src="{% static 'js/MyScripts.js' %}"></script>
-
-    {##}
-    {#    <script>#}
-    {#        $(document).ready(function () {#}
-    {#            var array = window.location.href.split("/");#}
-    {#            var id = array[array.length - 1];#}
-    {#            var url = id + "/checklike";#}
-    {#            var csrftoken = getCookie("csrftoken");#}
-    {##}
-    {#            console.log(url);#}
-    {#            $.ajax({#}
-    {#                url: url,#}
-    {#                method: 'POST',#}
-    {#                beforeSend: function (xhr, settings) {#}
-    {#                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {#}
-    {#                        xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
-    {#                    }#}
-    {#                },#}
-    {#                data: {csrftoken: csrftoken},#}
-    {#                dataType: "json",#}
-    {#                success: function f(resp) {#}
-    {#                    console.log('success');#}
-    {#                    console.log(resp.status);#}
-    {#                    if (resp.status == "yes") {#}
-    {#                        obj = $("#" + id + "-like-yes");#}
-    {#                        console.log(obj.id);#}
-    {#                        obj.id = id + "-like-" + "no";#}
-    {#                        $(obj).removeClass('link-black').addClass('link-orange');#}
-    {#                    }#}
-    {#                }#}
-    {#            });#}
-    {#        });</script>#}
-
 {% endblock %}
 
 {% block content %}
@@ -130,7 +97,7 @@
                                 </div><!-- /.user-block -->
                                 <p style="white-space: pre-wrap">{{ comment.text }}</p>
                                 <ul class="list-inline">
-                                    <li><a href="#" class="link-black text-sm"><i
+                                    <li><a href="#" class="link-black text-sm" id="{{ artwork.id }}-like-yes"><i
                                             class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></li>
                                 </ul>
                             </div><!-- /.comment -->

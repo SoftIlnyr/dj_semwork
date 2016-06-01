@@ -2,105 +2,13 @@
  * Created by softi on 01.06.2016.
  */
 
-$(document).ready(function () {
-    var array = window.location.href.split("/");
-    var id = array[array.length - 1];
-    var url = id + "/checklike";
-    var csrftoken = getCookie("csrftoken");
-
-    console.log(url);
-    $.ajax({
-        url: url,
-        method: 'POST',
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        },
-        data: {csrftoken: csrftoken},
-        dataType: "json",
-        success: function f(resp) {
-            console.log('success');
-            console.log(resp.status);
-            if (resp.status == "yes") {
-                obj = $("#" + id + "-like-yes");
-                obj.id = id + "-like-" + "no";
-                $(obj).removeClass('link-black').addClass('link-orange');
-            }
-        }
-    });
-});
-
 function checkFollow(id) {
-    console.log('invoke checkFollow');
     var oldurl = window.location.href.split("/");
     var newurlarray = oldurl.slice(0, 3);
     var url = newurlarray.join("/");
     url = url + "/users/" + id + "/checkfollow";
     var csrftoken = getCookie("csrftoken");
-    console.log(url);
-        $.ajax({
-        url: url,
-        method: 'POST',
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        },
-        data: {csrftoken: csrftoken},
-        dataType: "json",
-        success: function f(resp) {
-            console.log('success');
-            console.log('chechFollow: ' + resp.status);
-            return resp;
-        }
-    });
-}
-
-$(document).ready(function () {
-    console.log('follow by a');
-    var obj = $("a[name='follow']");
-    console.log(obj);
-    id = obj.attr('id').split("-")[0];
-    var resp = checkFollow(id);
-    console.log('after checkFollow: ' + resp);
-    //var oldurl = window.location.href.split("/");
-    //console.log(oldurl);
-    //var newurlarray = oldurl.slice(0, 3);
-    //var url = newurlarray.join("/");
-    //url = url + "/users/" + id + "/checkfollow";
-    //console.log(url);
-    //var csrftoken = getCookie("csrftoken");
-    //
-    //console.log(url);
-    //$.ajax({
-    //    url: url,
-    //    method: 'POST',
-    //    beforeSend: function (xhr, settings) {
-    //        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-    //            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    //        }
-    //    },
-    //    data: {csrftoken: csrftoken},
-    //    dataType: "json",
-    //    success: function f(resp) {
-    //        console.log('success');
-    //        console.log(resp.status);
-    //        if (resp.status == "yes") {
-    //            obj.id = id + "-follow-" + "no";
-    //            $(obj).removeClass('link-black');
-    //        }
-    //    }
-    //});
-});
-
-$(document).ready(function () {
-    var array = window.location.href.split("/");
-    var id = array[array.length - 1];
-    var url = id + "/checkfollow";
-    var csrftoken = getCookie("csrftoken");
-
-    console.log(url);
+    var response;
     $.ajax({
         url: url,
         method: 'POST',
@@ -110,16 +18,82 @@ $(document).ready(function () {
             }
         },
         data: {csrftoken: csrftoken},
+        async: false,
         dataType: "json",
         success: function f(resp) {
-            console.log('success');
-            console.log(resp.status);
-            if (resp.status == "yes") {
-                obj = $("#" + id + "-follow-yes");
-                obj.id = id + "-follow-" + "no";
-                $(obj).removeClass('btn-soundcloud').addClass('btn-primary');
-                $(obj).text("Following")
+            response = resp
+        }
+    });
+    return response;
+}
+
+function checkLike(id) {
+    var oldurl = window.location.href.split("/");
+    var newurlarray = oldurl.slice(0, 3);
+    var url = newurlarray.join("/");
+    url = url + "/artworks/" + id + "/checklike";
+    var csrftoken = getCookie("csrftoken");
+    var response;
+    $.ajax({
+        url: url,
+        method: 'POST',
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
+        },
+        data: {csrftoken: csrftoken},
+        async: false,
+        dataType: "json",
+        success: function f(resp) {
+            response = resp
+        }
+    });
+    return response;
+}
+
+
+$(document).ready(function () {
+    var objs = $("a[name='like']");
+    objs.each(function () {
+        var id = this.id.split("-")[0];
+        console.log(id);
+        var resp = checkLike(id);
+        console.log(resp);
+        if (resp.flag == "yes") {
+            console.log("change like");
+            $(this).removeClass('link-black');
+            this.id = id + "-like-no";
+        }
+    });
+});
+
+$(document).ready(function () {
+    var objs = $("a[name='follow']");
+    objs.each(function () {
+        var id = this.id.split("-")[0];
+        var resp = checkFollow(id);
+        console.log(resp);
+        if (resp.flag == "yes") {
+            console.log("change follow");
+            $(this).removeClass('link-black');
+            this.id = id + "-like-no";
+        }
+    });
+});
+
+
+$(document).ready(function () {
+    var objs = $("button[name='follow']");
+    objs.each(function () {
+        var id = this.id.split("-")[0];
+        var resp = checkFollow(id);
+        console.log(resp);
+        if (resp.flag == "yes") {
+            console.log("change follow");
+            $(this).removeClass('btn-soundcloud').addClass('btn-primary');
+            $(this).text('Following');
+            this.id = id + "-like-no";
         }
     });
 });
