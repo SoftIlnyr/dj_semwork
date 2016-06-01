@@ -21,7 +21,11 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="info">
-                        <h3 class="box-title">{{ artwork.title }}</h3>
+                        <h3 class="box-title">{{ artwork.title }} <a href="#" class="link-black pull-right"><i
+                                class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
+                        <h4> Author: <a class="link-black" href="{% url 'user_profile' artwork.author.user.id %}">{{ artwork.author.user.username }}</a> <a href="#"
+                                                                                                     class="link-black pull-right"><i
+                                class="fa fa-star-o margin-r-5"></i> Follow</a></h4>
 
                         <div class="box-body">
                             {% if artwork.type == "music" %}
@@ -50,10 +54,9 @@
                                 <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
                             {% endif %}
                         </div>
-                    <h3> <a href="#" class="link-black"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
+                        <hr/>
 
                         <hr/>
-                        <h3 class="box-title">Comments</h3>
                         <form class="form-horizontal" method="post">{% csrf_token %}
                             <div class="form-group margin-bottom-none">
                                 <div class="col-sm-9">
@@ -61,11 +64,13 @@
                                            placeholder="Type your comment">
                                 </div>
                                 <div class="col-sm-3">
-                                    <button class="btn btn-danger pull-right btn-block btn-sm">Send</button>
+                                    <button class="btn btn-soundcloud pull-right btn-block btn-sm">Send</button>
                                 </div>
                             </div>
                         </form>
 
+                        <hr/>
+                        <h3 class="box-title">Comments</h3>
                         <hr/>
 
                         {% for comment in comments %}
@@ -76,8 +81,7 @@
                                          src="{{ comment.publisher.avatar.url }}"
                                          alt="user image">
                         <span class="username">
-                          <a href="#">{{ comment.publisher.user.username }}.</a>
-                          <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+                          <a href="#">{{ comment.publisher.user.username }}</a>
                         </span>
                                     <span class="description">{{ comment.pub_date }}</span>
                                 </div><!-- /.user-block -->
@@ -85,8 +89,6 @@
                                 <ul class="list-inline">
                                     <li><a href="#" class="link-black text-sm"><i
                                             class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></li>
-                                    <li class="pull-right"><a href="#" class="link-black text-sm"><i
-                                            class="fa fa-comments-o margin-r-5"></i> Comments (5)</a></li>
                                 </ul>
                             </div><!-- /.comment -->
 

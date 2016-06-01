@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -12,7 +13,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.template.context_processors import csrf
 
-from general.forms import ArtUserRegistrationForm
+from general.forms import ArtUserRegistrationForm, ArtUserUpdateForm
 from general.models import ArtWork, Comment
 from literature.forms import WritingForm, WritingUpdateForm
 from music.forms import MTrackForm, MTrackUpdateForm
@@ -33,7 +34,7 @@ def artwork_page(request, artwork_id):
             f = PictureUpdateForm()
         elif (artwork.type == "litra"):
             f = WritingUpdateForm()
-        comments = Comment.objects.filter(art_work = artwork)
+        comments = Comment.objects.filter(art_work = artwork).order_by("-pub_date")
         return render(request, 'general/artwork_page.html', {'artwork': artwork, 'f': f, 'comments': comments})
     elif request.method == "POST":
         if request.user.is_authenticated():
@@ -48,7 +49,7 @@ def artwork_page(request, artwork_id):
             comment.save()
             return redirect(reverse('artwork', args=(artwork_id,)))
         else:
-            return redirect(reverse('artwork', args=artwork_id))
+            return redirect(reverse('login'))
 
     else:
         return HttpResponse("405")
@@ -96,6 +97,30 @@ def artwork_update(request, artwork_id):
     else:
         return HttpResponse("405")
 
+def user_profile(request, user_id):
+    user = User.objects.get(id = user_id)
+    artworks = ArtWork.objects.filter(author= user.artuser).order_by("-pub_date")
+    f = ArtUserUpdateForm()
+    return render(request, 'general/profile.html', {"auser": user, "artworks": artworks, "f": f})
+
+
+def user_update(request, user_id):
+    user = User.objects.get(id= user_id)
+    if request.method == "POST":
+        if request.user == user:
+            f = ArtUserUpdateForm(request.POST, request.FILES)
+            if f.is_valid:
+                f.update(user)
+                return redirect(reverse('user_profile', args=(user_id, )))
+            else:
+                return redirect(reverse('user_profile', args=(user_id, )))
+        else:
+            return redirect(reverse('user_profile', args=(user_id, )))
+    else:
+        return HttpResponse("405")
+
+
+
 def login(request):
     if request.user.is_authenticated():
         return redirect(reverse("pictures:index"))
@@ -115,12 +140,12 @@ def login(request):
                     h.set_cookie(key="remember", value=user.username, max_age=24*60*60)
                 return h
             else:
-                h = redirect(reverse("pictures:index"))
+                h = redirect(reverse("index"))
                 if re != None:
                     h.set_cookie(key="remember", value=user.username, max_age=24*60*60)
                 return h
         else:
-            return redirect(reverse("index"))
+            return redirect(reverse("login"))
     else:
         return HttpResponse("405")
 

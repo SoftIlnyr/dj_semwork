@@ -19,10 +19,10 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from SoftArts2 import settings
-from general.views import index as main_page, artwork_page, artwork_update
+from general.views import *
 
 urlpatterns = [
-                  url(r'^$', main_page, name='index'),
+                  url(r'^$', index, name='index'),
                   url(r'^admin/', admin.site.urls),
                   url(r'^login/', 'general.views.login', name='login'),
                   url(r'^logout/', 'general.views.logout', name='logout'),
@@ -32,4 +32,6 @@ urlpatterns = [
                   url(r'^literature/', include('literature.urls', namespace='literature')),
                   url(r'^artworks/(?P<artwork_id>\d+)/update', artwork_update, name='artwork_update'),
                   url(r'^artworks/(?P<artwork_id>\d+)', artwork_page, name='artwork'),
+                  url(r'^users/(?P<user_id>\d+)/update', user_update, name='user_update'),
+                  url(r'^users/(?P<user_id>\d+)', user_profile, name='user_profile'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

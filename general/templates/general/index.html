@@ -22,7 +22,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <a href="{% url 'artwork' artwork.id %}"><h3 class="box-title">{{ artwork.title }} </h3></a>
-                <small>by {{ artwork.author.user.username }}</small>
+                <small>by <a href="{% url 'user_profile' artwork.author.user.id %}" class="link-black">{{ artwork.author.user.username }}</a></small>
                 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
@@ -59,7 +59,7 @@
                             <input class="form-control input-sm" placeholder="Type your comment">
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-danger pull-right btn-block btn-sm">Send</button>
+                            <button class="btn btn-soundcloud pull-right btn-block btn-sm">Send</button>
                         </div>
                     </div>
                 </form>
