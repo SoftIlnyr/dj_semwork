@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -12,11 +12,73 @@ from django.template.context_processors import csrf
 
 from general.forms import ArtUserRegistrationForm
 from general.models import ArtWork
+from literature.forms import WritingForm, WritingUpdateForm
+from music.forms import MTrackForm, MTrackUpdateForm
+from pictures.forms import PictureForm, PictureUpdateForm
 
 
 def index(request):
     artworks = ArtWork.objects.all().order_by("-pub_date")
     return render(request, 'general/index.html', {"artworks": artworks,})
+
+def artwork_page(request, artwork_id):
+    if request.method == "GET":
+        artwork = ArtWork.objects.get(id = artwork_id)
+        f = None
+        if (artwork.type == "music"):
+            f = MTrackUpdateForm()
+        elif (artwork.type == "picture"):
+            f = PictureUpdateForm()
+        elif (artwork.type == "litra"):
+            f = WritingUpdateForm()
+        return render(request, 'general/artwork_page.html', {'artwork': artwork, 'f': f})
+    elif request.method == "POST":
+        pass
+    else:
+        return HttpResponse("405")
+
+@login_required(login_url=reverse_lazy("login"))
+def artwork_update(request, artwork_id):
+    artwork = ArtWork.objects.get(id = artwork_id)
+    if not request.user == artwork.author.user:
+        return redirect(reverse('artwork', args=(artwork_id ,)))
+    if request.method == "POST":
+        f = None
+        if (artwork.type == "music"):
+            f = MTrackUpdateForm(request.POST, request.FILES)
+            if f.is_valid():
+                if len(f.cleaned_data["title"]) > 0:
+                    artwork.title = f.cleaned_data["title"]
+                artwork.save()
+                mtrack = artwork.mtrack
+                if not f.cleaned_data["image"] is None:
+                    mtrack.image = f.cleaned_data["image"]
+                if len(f.cleaned_data["description"]) > 0:
+                    mtrack.description = f.cleaned_data["description"]
+                mtrack.save()
+        elif (artwork.type == "picture"):
+            f = PictureUpdateForm(request.POST, request.FILES)
+            if f.is_valid():
+                if len(f.cleaned_data["title"]) > 0:
+                    artwork.title = f.cleaned_data["title"]
+                artwork.save()
+                picture = artwork.picture
+                if len(f.cleaned_data["description"]) > 0:
+                    picture.description = f.cleaned_data["description"]
+                picture.save()
+        elif (artwork.type == "litra"):
+            f = WritingUpdateForm(request.POST)
+            if f.is_valid():
+                if len(f.cleaned_data["title"]) > 0:
+                    artwork.title = f.cleaned_data["title"]
+                artwork.save()
+                litra = artwork.literature
+                if len(f.cleaned_data["description"]) > 0:
+                    litra.description = f.cleaned_data["description"]
+                litra.save()
+        return redirect(reverse("artwork", args=(artwork_id,)))
+    else:
+        return HttpResponse("405")
 
 def login(request):
     if request.user.is_authenticated():

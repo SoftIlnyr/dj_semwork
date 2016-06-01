@@ -19,3 +19,12 @@ class MTrackForm(ArtWorkForm):
     class Meta:
         model = ArtWork
         fields = ('title', )
+
+class MTrackUpdateForm(ArtWorkForm):
+    title = forms.CharField(required=False)
+    image = forms.ImageField(required=False)
+    description = forms.CharField(widget=forms.Textarea, required=False)
+
+    class Meta:
+        model = ArtWork
+        fields = ('title', )

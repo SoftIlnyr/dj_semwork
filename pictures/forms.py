@@ -19,3 +19,11 @@ class PictureForm(ArtWorkForm):
         model = ArtWork
         fields = ('title', )
 
+class PictureUpdateForm(ArtWorkForm):
+    title = forms.CharField(required=False)
+    description = forms.CharField(widget=forms.Textarea, required=False)
+
+    class Meta:
+        model = ArtWork
+        fields = ('title',)
+

@@ -14,14 +14,14 @@
             {% elif artwork.type == "picture" %}
                 <section class="content col-md-3">
             {% elif artwork.type == "litra" %}
-                <section class="content col-md-3">
+                <section class="content col-md-5">
             {% endif %}
 
 
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">{{ artwork.title }} </h3>
+                <a href="{% url 'artwork' artwork.id %}"><h3 class="box-title">{{ artwork.title }} </h3></a>
                 <small>by {{ artwork.author.user.username }}</small>
                 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -37,15 +37,23 @@
                     {% if artwork.mtrack.image %}
 
                         <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
+                    {% elif not artwork.mtrack.description == ""%}
+                        <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
                     {% endif %}
                     <audio src="{{ artwork.mtrack.content.url }}" controls
                            preload="none" class="audio-control"></audio>
                 {% elif artwork.type == "picture" %}
-                    <img class="img-responsive" src="{{ artwork.picture.content.url }}">
+                    <img class="img-responsive img-bordered" src="{{ artwork.picture.content.url }}">
                 {% elif artwork.type == "litra" %}
                     <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
-
                 {% endif %}
+                <ul class="list-inline">
+                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
+                    </li>
+                    <li class="pull-right"><a href="#" class="link-black text-sm"><i
+                            class="fa fa-comments-o margin-r-5"></i> Comments ()</a></li>
+                </ul>
+                <input class="form-control input-sm" type="text" placeholder="Type a comment">
             </div><!-- /.box-body -->
         </div><!-- /.box -->
 

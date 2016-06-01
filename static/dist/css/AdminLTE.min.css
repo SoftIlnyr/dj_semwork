@@ -4642,11 +4642,14 @@ table.text-center, table.text-center td, table.text-center th {
     background-image: url("../../music.png");
     background-repeat: no-repeat;;
     background-size: cover;
+    background-attachment: fixed;
+
 }
 
 .bg-picture {
     background-image: url("../../picture.jpg");
     background-repeat: no-repeat;;
+    background-attachment: fixed;
     background-size: cover;
 }
 

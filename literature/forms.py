@@ -15,3 +15,10 @@ class WritingForm(ArtWorkForm):
         model = ArtWork
         fields = ('title', )
 
+class WritingUpdateForm(ArtWorkForm):
+    title = forms.CharField(required=False)
+    description = forms.CharField(widget=forms.Textarea, required=False)
+
+    class Meta:
+        model = ArtWork
+        fields = ('title', )
