@@ -1,6 +1,44 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block scripts %}
+    <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/MyScripts.js' %}"></script>
 
+{#    <script>#}
+{#        $(document).ready(function () {#}
+{#            var array = window.location.href.split("/");#}
+{#            var id = array[array.length - 1];#}
+{#            var url = id + "/checkfollow";#}
+{#            var csrftoken = getCookie("csrftoken");#}
+{##}
+{#            console.log(url);#}
+{#            $.ajax({#}
+{#                url: url,#}
+{#                method: 'POST',#}
+{#                beforeSend: function (xhr, settings) {#}
+{#                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {#}
+{#                        xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
+{#                    }#}
+{#                },#}
+{#                data: {csrftoken: csrftoken},#}
+{#                dataType: "json",#}
+{#                success: function f(resp) {#}
+{#                    console.log('success');#}
+{#                    console.log(resp.status);#}
+{#                    if (resp.status == "yes") {#}
+{#                        obj = $("#" + id + "-follow-yes");#}
+{#                        console.log(obj.id);#}
+{#                        obj.id = id + "-follow-" + "no";#}
+{#                        $(obj).removeClass('btn-soundcloud').addClass('btn-primary');#}
+{#                        $(obj).text("Following")#}
+{#                    }#}
+{#                }#}
+{#            });#}
+{#        });</script>#}
+
+
+
+{% endblock %}
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper bg-music" style="background-image: {% static 'music.jpg' %}">
@@ -21,8 +59,10 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <a href="{% url 'artwork' artwork.id %}"><h3 class="box-title">{{ artwork.title }} </h3></a>
-                <small>by <a href="{% url 'user_profile' artwork.author.user.id %}" class="link-black">{{ artwork.author.user.username }}</a></small>
+                <a class="link-black" href="{% url 'artwork' artwork.id %}"><h3
+                        class="box-title">{{ artwork.title }} </h3></a>
+                <small>by <a href="{% url 'user_profile' artwork.author.user.id %}"
+                             class="link-black">{{ artwork.author.user.username }}</a></small>
                 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
@@ -48,10 +88,11 @@
                     <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
                 {% endif %}
                 <ul class="list-inline">
-                    <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
+                    <li><a id="{{ artwork.id }}-like-yes" href="#" class="link-black text-sm" onclick="like(this)"><i
+                            class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
                     </li>
                     <li class="pull-right"><a href="{% url 'artwork' artwork.id %}" class="link-black text-sm"><i
-                            class="fa fa-comments-o margin-r-5"></i> Comments ()</a></li>
+                            class="fa fa-comments-o margin-r-5"></i> Comments ({{ artwork.comments|length }})</a></li>
                 </ul>
                 <form class="form-horizontal">
                     <div class="form-group margin-bottom-none">

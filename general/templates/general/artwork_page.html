@@ -3,6 +3,44 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
 
+{% block scripts %}
+    <script src="{% static 'plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/MyScripts.js' %}"></script>
+
+    {##}
+    {#    <script>#}
+    {#        $(document).ready(function () {#}
+    {#            var array = window.location.href.split("/");#}
+    {#            var id = array[array.length - 1];#}
+    {#            var url = id + "/checklike";#}
+    {#            var csrftoken = getCookie("csrftoken");#}
+    {##}
+    {#            console.log(url);#}
+    {#            $.ajax({#}
+    {#                url: url,#}
+    {#                method: 'POST',#}
+    {#                beforeSend: function (xhr, settings) {#}
+    {#                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {#}
+    {#                        xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
+    {#                    }#}
+    {#                },#}
+    {#                data: {csrftoken: csrftoken},#}
+    {#                dataType: "json",#}
+    {#                success: function f(resp) {#}
+    {#                    console.log('success');#}
+    {#                    console.log(resp.status);#}
+    {#                    if (resp.status == "yes") {#}
+    {#                        obj = $("#" + id + "-like-yes");#}
+    {#                        console.log(obj.id);#}
+    {#                        obj.id = id + "-like-" + "no";#}
+    {#                        $(obj).removeClass('link-black').addClass('link-orange');#}
+    {#                    }#}
+    {#                }#}
+    {#            });#}
+    {#        });</script>#}
+
+{% endblock %}
+
 {% block content %}
 
     <div class="content-wrapper bg-picture">
@@ -21,11 +59,16 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="info">
-                        <h3 class="box-title">{{ artwork.title }} <a href="#" class="link-black pull-right"><i
+                        <h3 class="box-title">{{ artwork.title }} <a id="{{ artwork.id }}-like-yes" href="#"
+                                                                     onclick="like(this)" name="like"
+                                                                     class="link-black pull-right"><i
                                 class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
-                        <h4> Author: <a class="link-black" href="{% url 'user_profile' artwork.author.user.id %}">{{ artwork.author.user.username }}</a> <a href="#"
-                                                                                                     class="link-black pull-right"><i
-                                class="fa fa-star-o margin-r-5"></i> Follow</a></h4>
+                        <h4> Author: <a class="link-black"
+                                        href="{% url 'user_profile' artwork.author.user.id %}">{{ artwork.author.user.username }}</a>
+                            <a href="#" onclick="follow_a(this)" id="{{ artwork.author.user.id }}-follow-yes"
+                               name="follow"
+                               class="link-black pull-right"><i
+                                    class="fa fa-star-o margin-r-5"></i> Follow</a></h4>
 
                         <div class="box-body">
                             {% if artwork.type == "music" %}
