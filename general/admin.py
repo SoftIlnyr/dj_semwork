@@ -19,7 +19,26 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
-admin.site.register(ArtWork)
-admin.site.register(Comment)
+class ArtWorkAdmin(admin.ModelAdmin):
+    list_display = ["id", "title",  "type", "pub_date", "rating"]
+    list_editable = ["title"]
+    search_fields = ["title", "type"]
+    list_filter = ['type', "pub_date"]
+
+    class Meta:
+        model = ArtWork
+
+
+admin.site.register(ArtWork, ArtWorkAdmin)
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ["id","artwork", "publisher", "text", "pub_date"]
+    list_filter = ["publisher", "pub_date"]
+    search_fields = ["title", "text", "publisher"]
+
+    class Meta:
+        model = Comment
+
+admin.site.register(Comment, CommentAdmin)
 # admin.site.register(ArtUser)
 

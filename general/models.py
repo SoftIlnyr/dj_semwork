@@ -22,11 +22,11 @@ class ArtWork(models.Model):
     type = models.CharField(max_length=10, blank=True)
 
     def __unicode__(self):
-        return "%s - %s" % (self.title, self.type)
+        return "%s : %s (%s)" % (self.title, self.author.user.username, self.type )
 
 
 class Comment(models.Model):
-    art_work = models.ForeignKey(ArtWork)
+    artwork = models.ForeignKey(ArtWork)
     publisher = models.ForeignKey(ArtUser)
     text = models.TextField(blank=False, max_length=255)
     pub_date = models.DateTimeField()
