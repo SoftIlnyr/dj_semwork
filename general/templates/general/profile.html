@@ -11,166 +11,265 @@
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                User Profile: {{ auser.username }}
-            </h1>
-        </section>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            User Profile: {{ auser.username }}
+        </h1>
+    </section>
 
-        <!-- Main content -->
-        <section class="content">
+    <!-- Main content -->
+    <section class="content">
 
-            <div class="row">
-                <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-3">
 
-                    <!-- Profile Image -->
-                    <div class="box box-primary">
-                        <div class="box-body box-profile">
-                            <img class="profile-user-img img-responsive img-circle img-cropped"
-                                 src="{{ auser.artuser.avatar.url }}" alt="User profile picture">
-                            <h3 class="profile-username text-center">{{ auser.first_name }} {{ auser.last_name }}</h3>
+                <!-- Profile Image -->
+                <div class="box box-primary">
+                    <div class="box-body box-profile">
+                        <img class="profile-user-img img-responsive img-circle img-cropped"
+                             src="{{ auser.artuser.avatar.url }}" alt="User profile picture">
+                        <h3 class="profile-username text-center">{{ auser.first_name }} {{ auser.last_name }}</h3>
 
-                            <ul class="list-group list-group-unbordered">
-                                <li class="list-group-item">
-                                    <b>Followers</b> <a class="pull-right">1,322</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Following</b> <a class="pull-right">543</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Favourites</b> <a class="pull-right">13,287</a>
-                                </li>
-                            </ul>
-
-                            {% if not user == auser %}
-                                <button id="{{ auser.id }}-follow-yes" onclick="follow_button(this)"
-                                        class="btn btn-block btn-soundcloud" name="follow">Follow
-                                </button>
-                            {% endif %}
-                        </div><!-- /.box-body -->
-                    </div><!-- /.box -->
-
-
-                </div><!-- /.col -->
-                <div class="col-md-9">
-                    <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#arts" data-toggle="tab">Arts</a></li>
-                            {% if user == auser %}
-                                <li><a href="#settings" data-toggle="tab">Settings</a></li>
-                            {% endif %}
+                        <ul class="list-group list-group-unbordered">
+                            <li class="list-group-item">
+                                <b>Followers</b> <a class="pull-right">{{ auser.foll|length }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Following</b> <a class="pull-right">{{ auser.fall|length }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Favourites</b> <a class="pull-right">{{ auser.fav|length }}</a>
+                            </li>
                         </ul>
-                        <div class="tab-content">
-                            <div class="active tab-pane" id="arts">
-                                {% for artwork in artworks %}
-                                    <h3 class="box-title"><a class="link-black"
-                                                             href="{% url 'artwork' artwork.id %}">{{ artwork.title }}</a>
-                                        <a href="#" class="link-black pull-right" name="like" id="{{ artwork.id }}-like-yes" onclick="like(this)"><i
-                                                class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
 
-                                    <div class="box-body">
-                                        {% if artwork.type == "music" %}
-                                            <div class="col-md-3">
-                                                {% if artwork.mtrack.image %}
+                        {% if not user == auser %}
+                            <button id="{{ auser.id }}-follow-yes" onclick="follow_button(this)"
+                                    class="btn btn-block btn-soundcloud" name="follow">Follow
+                            </button>
+                        {% endif %}
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
 
-                                                    <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
 
-                                                {% endif %}
-                                                <audio src="{{ artwork.mtrack.content.url }}" controls="controls"
-                                                       preload="auto" style="width: 100%"></audio>
-                                            </div>
-                                            <div class="col-md-9">
-                                                <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
-                                            </div>
-                                        {% elif artwork.type == "picture" %}
-                                            <div class="col-md-6">
+            </div><!-- /.col -->
+            <div class="col-md-9">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#arts" data-toggle="tab">Arts</a></li>
+                        <li class=""><a href="#favorites" data-toggle="tab">Favorites</a></li>
+                        <li class=""><a href="#following" data-toggle="tab">Following</a></li>
+                        {% if user == auser %}
+                            <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                        {% endif %}
+                    </ul>
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="arts">
+                            {% for artwork in artworks %}
+                                <h3 class="box-title"><a class="link-black"
+                                                         href="{% url 'artwork' artwork.id %}">{{ artwork.title }}</a>
+                                    <a href="#" class="link-black pull-right" name="like" id="{{ artwork.id }}-like-yes"
+                                       onclick="like(this)"><i
+                                            class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
 
-                                                <img class="img-responsive img-bordered"
-                                                     src="{{ artwork.picture.content.url }}">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
-                                            </div>
-                                        {% elif artwork.type == "litra" %}
-                                            <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
-                                        {% endif %}
+                                <div class="box-body">
+                                    {% if artwork.type == "music" %}
+                                        <div class="col-md-3">
+                                            {% if artwork.mtrack.image %}
+
+                                                <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
+
+                                            {% endif %}
+                                            <audio src="{{ artwork.mtrack.content.url }}" controls="controls"
+                                                   preload="auto" style="width: 100%"></audio>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
+                                        </div>
+                                    {% elif artwork.type == "picture" %}
+                                        <div class="col-md-6">
+
+                                            <img class="img-responsive img-bordered"
+                                                 src="{{ artwork.picture.content.url }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
+                                        </div>
+                                    {% elif artwork.type == "litra" %}
+                                        <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
+                                    {% endif %}
+                                </div>
+                                <hr/>
+                            {% endfor %}
+
+
+                        </div><!-- /.tab-pane -->
+
+
+                        <div class="tab-pane" id="favorites">
+                            {% for artwork in auser.fav %}
+                                <h3 class="box-title"><a class="link-black"
+                                                         href="{% url 'artwork' artwork.id %}">{{ artwork.title }}</a>
+                                    <a href="#" class="link-black pull-right" name="like" id="{{ artwork.id }}-like-yes"
+                                       onclick="like(this)"><i
+                                            class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
+                                <h4> Author: <a class="link-black"
+                                                href="{% url 'user_profile' artwork.author.user.id %}">{{ artwork.author.user.username }}</a>
+                                    <a href="#" onclick="follow_a(this)" id="{{ artwork.author.user.id }}-follow-yes"
+                                       name="follow"
+                                       class="link-black pull-right"><i
+                                            class="fa fa-star-o margin-r-5"></i> Follow</a></h4>
+
+                                <div class="box-body">
+                                    {% if artwork.type == "music" %}
+                                        <div class="col-md-3">
+                                            {% if artwork.mtrack.image %}
+
+                                                <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
+
+                                            {% endif %}
+                                            <audio src="{{ artwork.mtrack.content.url }}" controls="controls"
+                                                   preload="auto" style="width: 100%"></audio>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
+                                        </div>
+                                    {% elif artwork.type == "picture" %}
+                                        <div class="col-md-6">
+
+                                            <img class="img-responsive img-bordered"
+                                                 src="{{ artwork.picture.content.url }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
+                                        </div>
+                                    {% elif artwork.type == "litra" %}
+                                        <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
+                                    {% endif %}
+                                </div>
+                                <hr/>
+                            {% endfor %}
+
+
+                        </div><!-- /.tab-pane -->
+
+                        <div class="tab-pane" id="following">
+                            {% for artwork in auser.fallart %}
+                                <h3 class="box-title"><a class="link-black"
+                                                         href="{% url 'artwork' artwork.id %}">{{ artwork.title }}</a>
+                                    <a href="#" class="link-black pull-right" name="like" id="{{ artwork.id }}-like-yes"
+                                       onclick="like(this)"><i
+                                            class="fa fa-thumbs-o-up margin-r-5"></i> Like</a></h3>
+                                <h4> Author: <a class="link-black"
+                                                href="{% url 'user_profile' artwork.author.user.id %}">{{ artwork.author.user.username }}</a>
+                                    <a href="#" onclick="follow_a(this)" id="{{ artwork.author.user.id }}-follow-yes"
+                                       name="follow"
+                                       class="link-black pull-right"><i
+                                            class="fa fa-star-o margin-r-5"></i> Follow</a></h4>
+
+                                <div class="box-body">
+                                    {% if artwork.type == "music" %}
+                                        <div class="col-md-3">
+                                            {% if artwork.mtrack.image %}
+
+                                                <img class="img-responsive" src="{{ artwork.mtrack.image.url }}">
+
+                                            {% endif %}
+                                            <audio src="{{ artwork.mtrack.content.url }}" controls="controls"
+                                                   preload="auto" style="width: 100%"></audio>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
+                                        </div>
+                                    {% elif artwork.type == "picture" %}
+                                        <div class="col-md-6">
+
+                                            <img class="img-responsive img-bordered"
+                                                 src="{{ artwork.picture.content.url }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p style="white-space: pre-wrap">{{ artwork.mtrack.description }}</p>
+                                        </div>
+                                    {% elif artwork.type == "litra" %}
+                                        <p style="white-space: pre-wrap">{{ artwork.literature.content }}</p>
+                                    {% endif %}
+                                </div>
+                                <hr/>
+                            {% endfor %}
+
+
+                        </div><!-- /.tab-pane -->
+
+
+                        <div class="tab-pane" id="settings">
+                            <form method="post" class="form-horizontal" enctype="multipart/form-data"
+                                  action="{% url 'user_update' auser.id %}"> {% csrf_token %}
+
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_username">Username</label>
+                                    <div class="col-md-10"><input class="form-control" id="id_username"
+                                                                  maxlength="30" name="username"
+                                                                  placeholder="Username" required="required"
+                                                                  title="Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
+                                                                  type="text" value="{{ auser.username }}">
                                     </div>
-                                    <hr/>
-                                {% endfor %}
-
-
-                            </div><!-- /.tab-pane -->
-
-
-                            <div class="tab-pane" id="settings">
-                                <form method="post" class="form-horizontal" enctype="multipart/form-data"
-                                      action="{% url 'user_update' auser.id %}"> {% csrf_token %}
-
-                                    <div class="form-group"><label class="col-md-2 control-label" for="id_username">Username</label>
-                                        <div class="col-md-10"><input class="form-control" id="id_username"
-                                                                      maxlength="30" name="username"
-                                                                      placeholder="Username" required="required"
-                                                                      title="Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
-                                                                      type="text" value="{{ auser.username }}">
+                                </div>
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_email">Email</label>
+                                    <div class="col-md-10"><input class="form-control" id="id_email"
+                                                                  name="email" placeholder="Email" title=""
+                                                                  type="email" value="{{ auser.email }}"></div>
+                                </div>
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_password1">Password</label>
+                                    <div class="col-md-10"><input class="form-control" id="id_password1"
+                                                                  name="password1" placeholder="Password"
+                                                                  title="" type="password">
+                                    </div>
+                                </div>
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_password2">Password confirmation</label>
+                                    <div class="col-md-10"><input class="form-control" id="id_password2"
+                                                                  name="password2"
+                                                                  placeholder="Password confirmation"
+                                                                  title="Enter the same password as before, for verification."
+                                                                  type="password"></div>
+                                </div>
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_first_name">First name</label>
+                                    <div class="col-md-10"><input class="form-control" id="id_first_name"
+                                                                  name="first_name" placeholder="First name"
+                                                                  title="" type="text"
+                                                                  value="{{ auser.first_name }}"></div>
+                                </div>
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_last_name">Last name</label>
+                                    <div class="col-md-10"><input class="form-control" id="id_last_name"
+                                                                  name="last_name" placeholder="Last name"
+                                                                  title="" type="text"
+                                                                  value="{{ auser.last_name }}"></div>
+                                </div>
+                                <div class="form-group"><label class="col-md-2 control-label"
+                                                               for="id_avatar">Avatar</label>
+                                    <div class="col-md-10">
+                                        <div class="row bootstrap3-multi-input">
+                                            <div class="col-xs-12"><input class="" id="id_avatar" name="avatar"
+                                                                          title="" type="file"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group"><label class="col-md-2 control-label"
-                                                                   for="id_email">Email</label>
-                                        <div class="col-md-10"><input class="form-control" id="id_email"
-                                                                      name="email" placeholder="Email" title=""
-                                                                      type="email" value="{{ auser.email }}"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-soundcloud pull-right">Save changes
+                                        </button>
                                     </div>
-                                    <div class="form-group"><label class="col-md-2 control-label"
-                                                                   for="id_password1">Password</label>
-                                        <div class="col-md-10"><input class="form-control" id="id_password1"
-                                                                      name="password1" placeholder="Password"
-                                                                      title="" type="password">
-                                        </div>
-                                    </div>
-                                    <div class="form-group"><label class="col-md-2 control-label"
-                                                                   for="id_password2">Password confirmation</label>
-                                        <div class="col-md-10"><input class="form-control" id="id_password2"
-                                                                      name="password2"
-                                                                      placeholder="Password confirmation"
-                                                                      title="Enter the same password as before, for verification."
-                                                                      type="password"></div>
-                                    </div>
-                                    <div class="form-group"><label class="col-md-2 control-label"
-                                                                   for="id_first_name">First name</label>
-                                        <div class="col-md-10"><input class="form-control" id="id_first_name"
-                                                                      name="first_name" placeholder="First name"
-                                                                      title="" type="text"
-                                                                      value="{{ auser.first_name }}"></div>
-                                    </div>
-                                    <div class="form-group"><label class="col-md-2 control-label"
-                                                                   for="id_last_name">Last name</label>
-                                        <div class="col-md-10"><input class="form-control" id="id_last_name"
-                                                                      name="last_name" placeholder="Last name"
-                                                                      title="" type="text"
-                                                                      value="{{ auser.last_name }}"></div>
-                                    </div>
-                                    <div class="form-group"><label class="col-md-2 control-label"
-                                                                   for="id_avatar">Avatar</label>
-                                        <div class="col-md-10">
-                                            <div class="row bootstrap3-multi-input">
-                                                <div class="col-xs-12"><input class="" id="id_avatar" name="avatar"
-                                                                              title="" type="file"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <button type="submit" class="btn btn-soundcloud pull-right">Save changes
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div><!-- /.tab-pane -->
-                        </div><!-- /.tab-content -->
-                    </div><!-- /.nav-tabs-custom -->
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+                                </div>
+                            </form>
+                        </div><!-- /.tab-pane -->
+                    </div><!-- /.tab-content -->
+                </div><!-- /.nav-tabs-custom -->
+            </div><!-- /.col -->
+        </div><!-- /.row -->
 
-        </section><!-- /.content -->
+    </section><!-- /.content -->
 {% endblock %}

@@ -57,7 +57,7 @@
             <ul class="list-inline">
                 <li><a name="like" id="{{ artwork.id }}-like-yes" href="#" class="link-black text-sm"
                        onclick="like(this)"><i
-                        class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
+                        class="fa fa-thumbs-o-up margin-r-5"></i> Like({{ artwork.rating }})</a>
                 </li>
                 <li class="pull-right"><a href="{% url 'artwork' artwork.id %}" class="link-black text-sm"><i
                         class="fa fa-comments-o margin-r-5"></i> Comments ({{ artwork.comments|length }})</a></li>

@@ -104,7 +104,18 @@ def artwork_update(request, artwork_id):
 
 def user_profile(request, user_id):
     user = User.objects.get(id=user_id)
+    foll = user.artuser.followers.all()
+    fall = user.artuser.following.all()
+    fav = user.artuser.favorites.all()
+    user.foll = foll
+    user.fall = fall
+    user.fav = fav
     artworks = ArtWork.objects.filter(author=user.artuser).order_by("-pub_date")
+    artworks2 = []
+    for artwork in ArtWork.objects.all().order_by("-pub_date"):
+        if artwork.author in fall:
+            artworks2.append(artwork)
+    user.fallart = artworks2
     f = ArtUserUpdateForm()
     return render(request, 'general/profile.html', {"auser": user, "artworks": artworks, "f": f})
 
@@ -160,6 +171,8 @@ def artwork_like(request, artwork_id):
         artwork = ArtWork.objects.get(id=artwork_id)
         current_user = request.user.artuser
         current_user.favorites.add(artwork)
+        artwork.rating += 1
+        artwork.save()
         current_user.save()
         return JsonResponse({"flag": "ok"})
     else:
@@ -171,6 +184,8 @@ def artwork_unlike(request, artwork_id):
         artwork = ArtWork.objects.get(id=artwork_id)
         current_user = request.user.artuser
         current_user.favorites.remove(artwork)
+        artwork.rating -= 1
+        artwork.save()
         current_user.save()
         return JsonResponse({"flag": "ok"})
     else:
