@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from general.models import ArtWork
+from general.models import ArtWork, Comment
 from music.forms import MTrackForm
 from music.models import MTrack
 
@@ -16,6 +16,8 @@ def index(request):
     mtracks = []
     for artwork in artworks:
         if artwork.type == 'music':
+            comments = Comment.objects.filter(art_work=artwork)
+            artwork.comments = comments
             mtracks.append(artwork)
     return render(request, 'music/index.html', {"artworks": mtracks,})
 

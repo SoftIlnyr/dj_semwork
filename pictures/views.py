@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from general.models import ArtWork
+from general.models import ArtWork, Comment
 from pictures.forms import PictureForm
 from pictures.models import Picture
 
@@ -16,6 +16,8 @@ def index(request):
     pictures = []
     for artwork in artworks:
         if artwork.type == 'picture':
+            comments = Comment.objects.filter(art_work=artwork)
+            artwork.comments = comments
             pictures.append(artwork)
     return render(request, 'pictures/index.html', {"artworks": pictures,})
 
