@@ -22,7 +22,7 @@ from pictures.forms import PictureForm, PictureUpdateForm
 def index(request):
     artworks = ArtWork.objects.all().order_by("-pub_date")
     for artwork in artworks:
-        comments = Comment.objects.filter(art_work=artwork)
+        comments = Comment.objects.filter(artwork=artwork)
         artwork.comments = comments
     return render(request, 'general/index.html', {"artworks": artworks})
 
@@ -37,7 +37,7 @@ def artwork_page(request, artwork_id):
             f = PictureUpdateForm()
         elif (artwork.type == "litra"):
             f = WritingUpdateForm()
-        comments = Comment.objects.filter(art_work=artwork).order_by("-pub_date")
+        comments = Comment.objects.filter(artwork=artwork).order_by("-pub_date")
         return render(request, 'general/artwork_page.html', {'artwork': artwork, 'f': f, 'comments': comments})
     elif request.method == "POST":
         if request.user.is_authenticated():
@@ -45,7 +45,7 @@ def artwork_page(request, artwork_id):
             if len(ctext) == 0:
                 return redirect(reverse('artwork', args=artwork_id))
             comment = Comment()
-            comment.art_work = artwork
+            comment.artwork = artwork
             comment.text = ctext
             comment.publisher = request.user.artuser
             comment.pub_date = datetime.now()

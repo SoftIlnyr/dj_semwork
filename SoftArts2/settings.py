@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import dj_database_url
+
+db_from_env = dj_database_url.config()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -26,7 +30,6 @@ SECRET_KEY = '%+5a4f&oh3-zaxlaptt@1-g%wvj+)pxko8c$co+0^@4&!_n5t-'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -78,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SoftArts2.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -89,6 +91,7 @@ DATABASES = {
     }
 }
 
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -108,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -122,17 +124,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(PROJECT_ROOT, 'static')]
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
@@ -197,7 +199,7 @@ BOOTSTRAP3 = {
     'success_css_class': 'has-success',
 
     # Renderers (only set these if you have studied the source and understand the inner workings)
-    'formset_renderers':{
+    'formset_renderers': {
         'default': 'bootstrap3.renderers.FormsetRenderer',
     },
     'form_renderers': {

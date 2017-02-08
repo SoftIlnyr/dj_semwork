@@ -16,7 +16,7 @@ def index(request):
     mtracks = []
     for artwork in artworks:
         if artwork.type == 'music':
-            comments = Comment.objects.filter(art_work=artwork)
+            comments = Comment.objects.filter(artwork=artwork)
             artwork.comments = comments
             mtracks.append(artwork)
     return render(request, 'music/index.html', {"artworks": mtracks,})

@@ -16,7 +16,7 @@ def index(request):
     pictures = []
     for artwork in artworks:
         if artwork.type == 'picture':
-            comments = Comment.objects.filter(art_work=artwork)
+            comments = Comment.objects.filter(artwork=artwork)
             artwork.comments = comments
             pictures.append(artwork)
     return render(request, 'pictures/index.html', {"artworks": pictures,})
